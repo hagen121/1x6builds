@@ -1,8 +1,0 @@
-{
-  "version": 2,
-  "functions": {
-    "api/1x6.py": {
-      "runtime": "python3.9"
-    }
-  }
-}
