@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dota 2 Item Builds</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .hero-form { margin-bottom: 20px; }
+        .build-section { margin-bottom: 30px; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 8px 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .item-image { width: 50px; margin-right: 10px; }
+        .item-list { display: flex; gap: 10px; }
+        .item-list img { width: 50px; }
+
+        /* Новые стили для заголовков Talent */
+        h3 {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dota 2 Item Builds</h1>
+
+        <form class="hero-form" method="POST">
+            <label for="hero_name">Enter Hero Name:</label>
+            <input type="text" name="hero_name" id="hero_name" placeholder="e.g., axe" required>
+            <button type="submit">Get Builds</button>
+        </form>
+
+        {% if builds %}
+            <h2>Item Builds for {{ hero_name }}</h2>
+            {% for talent, items in builds['talentBuilds'].items() %}
+                <div class="build-section">
+                    <h3>Talent: {{ talent.capitalize() }}</h3>
+                    {% for stage, build in items.items() %}
+                        <p><strong>{{ stage.capitalize() }} items:</strong></p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in build['items'] %}
+                                    {% if item != 'item_empty' %}
+                                        <tr>
+                                            <td>
+                                                <div class="item-list">
+                                                    <img src="https://dota1x6.com/images/dota_items/{{ item.replace('item_', '') }}.png" alt="{{ item }}" class="item-image">
+                                                    <p>{{ item.replace('item_', '').replace('_custom', '').replace('_', ' ').title() }}</p>
+                                                </div>
+                                            </td>
+                                            <td>{{ build.get('description', 'No description available') }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <p><strong>Aghanim Shard:</strong> {{ build['hasAghanimShard'] }}</p>
+                        <p><strong>Aghanim Scepter:</strong> {{ build['hasAghanimScepter'] }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% elif hero_name %}
+            <p>No builds found for {{ hero_name }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
